@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Lecture Scheduling System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body, html {
+      height: 100vh;
+    }
+
+    .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero {
+      height: 38vh;
+      background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 17px;
+      max-width: 700px;
+      margin-top: 16px;
+    }
+
+     .cards-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      padding: 50px 20px;
+    }
+
+    .card {
+      background: white;
+      color: #333;
+      width: 300px;
+      padding: 22px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      text-align: center;
+      transition: all 0.3s ease;
+      height: 300px;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+    }
+
+    .card .icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+      color: #4299e1;
+    }
+    .icon i {
+  font-size: 60px; 
+  background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+
+    .card h3 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    .card p {
+      font-size: 14px;
+      margin-bottom: 15px;
+      text-align: justify;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .card a {
+      display: inline-block;
+       background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 10px;
+      
+    }
+
+
+    footer {
+  text-align: center;
+  padding: 20px;
+  background: white;
+  margin-top: auto;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* soft top shadow */
+}
+
+.footer-icons {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+.footer-icons a {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6) border-box;
+  color: #3b82f6; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  box-shadow: 0 0 8px rgba(76, 201, 240, 0.3); 
+}
+
+.footer-icons a i {
+  background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.footer-icons a:hover {
+  transform: scale(1.1);
+}
+
+    
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!--Welcome Section -->
+  <section class="hero">
+    <h1>Welcome to Smart Lecture Scheduling System</h1>
+    <p>A smart way to manage and organize lectures efficiently for both teachers and admins.
+    Teachers stay organized with real-time timetables and announcements,
+while admins control scheduling, attendance, and updates in a seamless dashboard.</p>
+  </section>
+
+  <!-- Cards -->
+  <section class="cards-container">
+    
+    <!-- Teacher panel -->
+    <div class="card">
+      <div class="icon"><i class="fas fa-chalkboard-teacher"></i></div>
+      <h3>Teacher Panel</h3>
+      <p> View your personalized timetable, mark attendance, and read important announcements</p>
+      <a href="timetable.html">Go to Teacher Panel</a>
+    </div>
+
+    <!-- annoucement -->
+     <div class="card">
+       <div class="icon"><i class="fas fa-bullhorn"></i></div>
+       <h3>Notice Board</h3>
+       <p>Get the latest news, announcements, and notices directly from the college administration</p>
+       <a href="board.html">Go to Notice Board</a>
+     </div>
+
+
+    <!-- Admin poanel -->
+    <div class="card">
+      <div class="icon"><i class="fas fa-user-shield"></i></div>
+      <h3>Admin Panel</h3>
+      <p>Login as admin to manage, create, and edit the lecture schedules, announcements, and teacher records.</p>
+      <a href="adminlogin.html">Go to Admin Panel</a>
+    </div>
+
+  </section>
+
+   <footer>
+    <div class="footer-icons">
+      <a href="https://www.instagram.com/ifrah_mehar?igsh=eDU2cHZ2c2xzMGY0" target="_blank" aria-label="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="mailto:iframunawar1@gmail.com" target="_blank" aria-label="Email">
+        <i class="fas fa-envelope"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/ifra-munawar-436651357?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" aria-label="LinkedIn">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+      <a href="https://github.com/codecraft-by-ifra" target="_blank" aria-label="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

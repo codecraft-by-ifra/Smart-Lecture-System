@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Teacher</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+    /* background: linear-gradient(135deg, #aee2ff, #e8fbd5, #fde2e2, #f7d9ff); */
+     background: linear-gradient(to right, #6ee7b7, #93c5fd, #c4b5fd); 
+     /* background: linear-gradient(to right, #6ee7b7, #5fa9fd, #a190e9); */
+      justify-content: center;
+      align-items: center;
+     width: 100%;
+     height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 70px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    h1 {
+      text-align: center; 
+      margin-bottom: 30px;
+      background: linear-gradient( #4ade80, #3b82f6, #8b5cf6);
+    
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+    }
+
+    form.input-area {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 12px 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    .input-area input:focus {
+      outline: none;
+      border-color: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+    }
+
+    .input-area button {
+      padding: 12px 20px;
+      background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .input-area button:hover {
+      background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+    }
+
+    
+    .teacher-list {
+       margin-top: 30px;
+       max-height: 300px;
+       overflow-y: auto;
+       padding-right: 10px;
+    }
+
+    .teacher-card {
+  position: relative;
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  background: 
+    linear-gradient(to bottom, #4ade80, #3b82f6, #8b5cf6) 0 0 / 5px 100% no-repeat,
+    #f9f9f9;
+}
+
+
+    .teacher-card span {
+      font-weight: 500;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .teacher-card .actions button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      margin-left: 8px;
+      font-size: 16px;
+    }
+    .actions i {
+  background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fas fa-chalkboard-teacher"></i> Add Teacher</h1>
+
+    <form class="input-area" id="teacherForm">
+      <input type="text" id="teacherName" placeholder="Enter teacher name" required>
+      <button type="submit">Add</button>
+    </form>
+
+    <div class="teacher-list" id="teacherList">
+      <!-- Teacher cards yha show ho gy-->
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("teacherForm");
+    const nameInput = document.getElementById("teacherName");
+    const teacherList = document.getElementById("teacherList");
+
+    const API_BASE = "http://localhost:5000/api/teachers";
+
+    async function loadTeachers() {
+      const res = await fetch(API_BASE);
+      const data = await res.json();
+      teacherList.innerHTML = "";
+      data.forEach(t => {
+        const div = document.createElement("div");
+        div.className = "teacher-card";
+        div.innerHTML = `
+          <span>${t.name}</span>
+          <div class="actions">
+            <button class="edit" onclick="editTeacher('${t._id}', '${t.name}')"><i class="fas fa-edit"></i></button>
+            <button class="delete" onclick="deleteTeacher('${t._id}')"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        `;
+        teacherList.appendChild(div);
+      });
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = nameInput.value.trim();
+      if (!name) return;
+      const res = await fetch(`${API_BASE}/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name })
+      });
+      const result = await res.json();
+      if (res.ok) {
+        alert(result.message || "Added successfully!");
+        nameInput.value = "";
+        loadTeachers();
+      } else {
+        alert(result.message || "Something went wrong.");
+      }
+    });
+
+    async function deleteTeacher(id) {
+      if (!confirm("Delete this teacher?")) return;
+      await fetch(`${API_BASE}/${id}`, { method: "DELETE" });
+      loadTeachers();
+    }
+
+    function editTeacher(id, oldName) {
+      const newName = prompt("Update name:", oldName);
+      if (!newName) return;
+      fetch(`${API_BASE}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newName })
+      }).then(loadTeachers);
+    }
+
+    loadTeachers();
+  </script>
+
+</body>
+</html>

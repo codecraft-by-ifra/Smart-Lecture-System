@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Manage Timetable</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      /* background: linear-gradient(135deg, #aee2ff, #e8fbd5, #fde2e2, #f7d9ff); */
+       /* background: linear-gradient( #6ee7b7, #93c5fd, #c4b5fd);  */
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+     h1 {
+      text-align: center; 
+      margin-bottom: 30px;
+      background: linear-gradient( #4ade80, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+    }
+    .top-bar {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .top-bar select {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      width: 250px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+  background:  linear-gradient( #4ade80, #3b82f6);
+ 
+  color: white;
+}
+
+td:first-child,
+th:first-child {
+ background:  linear-gradient( #4ade80, #3b82f6);
+  color: white;
+  font-weight: bold;
+}
+
+    input {
+      width: 90%;
+      padding: 6px;
+      margin: 2px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .btn-group {
+      text-align: center;
+    }
+
+    .btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      margin: 0 10px;
+      font-size: 16px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .save-btn {
+      background-color: #3b82f6;
+    }
+
+    .update-btn {
+      background-color: #4ade80;
+    }
+
+    .delete-btn {
+      background-color: #8b5cf6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fas fa-calendar-alt"></i> Manage Timetable</h1>
+
+    <div class="top-bar">
+      <select id="teacherSelect" onchange="loadTimetable()">
+        <option value="">Select Teacher</option>
+      </select>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Lecture #</th>
+          <th>Monday</th>
+          <th>Tuesday</th>
+          <th>Wednesday</th>
+          <th>Thursday</th>
+          <th>Friday</th>
+        </tr>
+      </thead>
+      <tbody id="timetableBody">
+
+      </tbody>
+    </table>
+
+    <div class="btn-group">
+      <button class="btn save-btn" onclick="saveTimetable()">Save</button>
+      <button class="btn update-btn" onclick="updateTimetable()">Update</button>
+      <button class="btn delete-btn" onclick="deleteTimetable()">Delete</button>
+    </div>
+  </div>
+
+ <script>
+  const API_BASE = "http://localhost:5000";
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const lectures = [1, 2, 3, 4, 5];
+
+  function createGrid(data = []) {
+    const tbody = document.getElementById('timetableBody');
+    tbody.innerHTML = '';
+
+    for (let i = 0; i < 5; i++) {
+      const row = document.createElement('tr');
+      const rowLabel = document.createElement('td');
+      rowLabel.innerText = i + 1;
+      row.appendChild(rowLabel);
+
+      for (let j = 0; j < 5; j++) {
+        const cell = document.createElement('td');
+        const index = i * 5 + j;
+        const item = data[index] || { subject: '', class: '', time: '' };
+        cell.innerHTML = `
+          <input type="text" placeholder="Subject" value="${item.subject || ''}" />
+          <input type="text" placeholder="Class" value="${item.class || ''}" />
+          <input type="text" placeholder="Time" value="${item.time || ''}" />
+        `;
+        row.appendChild(cell);
+      }
+
+      tbody.appendChild(row);
+    }
+  }
+
+  async function loadTeacherDropdown() {
+    const res = await fetch(`${API_BASE}/api/teachers`);
+    const data = await res.json();
+    const select = document.getElementById("teacherSelect");
+    select.innerHTML = '<option value="">Select Teacher</option>';
+    data.forEach(t => {
+      const opt = document.createElement("option");
+      opt.value = t.name;
+      opt.textContent = t.name;
+      select.appendChild(opt);
+    });
+  }
+
+  async function saveTimetable() {
+    const name = document.getElementById('teacherSelect').value;
+    if (!name) return alert("Select a teacher first!");
+
+    const data = getTimetableData();
+
+    // First check if already exists
+    const checkRes = await fetch(`${API_BASE}/api/timetable/${name}`);
+    const existing = await checkRes.json();
+
+    if (existing && existing.timetable && existing.timetable.length > 0) {
+      // already exists thrn call update
+      const updateRes = await fetch(`${API_BASE}/api/timetable/update/${name}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ timetable: data })
+      });
+
+      if (updateRes.ok) {
+        alert("Timetable updated!");
+      } else {
+        alert("Update failed.");
+      }
+
+    } else {
+      // elsee call save
+      const res = await fetch(`${API_BASE}/api/timetable/save`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, timetable: data })
+      });
+
+      if (res.ok) alert("Timetable saved!");
+      else alert("Save failed.");
+    }
+  }
+
+  async function updateTimetable() {
+    const name = document.getElementById('teacherSelect').value;
+    if (!name) return alert("Select a teacher first!");
+
+    const data = getTimetableData();
+    const res = await fetch(`${API_BASE}/api/timetable/update/${name}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ timetable: data })
+    });
+
+    if (res.ok) alert("Timetable updated!");
+  }
+
+  async function deleteTimetable() {
+    const name = document.getElementById('teacherSelect').value;
+    if (!name) return alert("Select a teacher first!");
+
+const data = getTimetableData();
+    if (!confirm("Delete this teacher's timetable?")) return;
+
+    const res = await fetch(`${API_BASE}/api/timetable/delete/${name}`, {
+      method: 'DELETE'
+    });
+
+    if (res.ok) {
+      alert("Timetable deleted!");
+      createGrid();
+    }
+  }
+
+  async function loadTimetable() {
+    const name = document.getElementById('teacherSelect').value;
+    if (!name) return createGrid();
+
+    const res = await fetch(`${API_BASE}/api/timetable/${name}`);
+    const data = await res.json();
+    createGrid(data.timetable || []);
+  }
+
+  function getTimetableData() {
+    const result = [];
+    const rows = document.querySelectorAll('#timetableBody tr');
+    rows.forEach(row => {
+      const inputs = row.querySelectorAll('td input');
+      for (let i = 0; i < 5; i++) {
+        const index = i * 3;
+        result.push({
+          subject: inputs[index]?.value || '',
+          class: inputs[index + 1]?.value || '',
+          time: inputs[index + 2]?.value || ''
+        });
+      }
+    });
+    return result;
+  }
+
+  loadTeacherDropdown();
+  createGrid();
+</script>
+
+</body>
+</html>

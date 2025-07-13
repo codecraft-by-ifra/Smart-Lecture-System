@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Smart Lecture Scheduling</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f2f2f2;
+    }
+
+
+    .top-header {
+         background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      color: white;
+      height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      font-weight: bold;
+      padding: 0 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .main {
+      padding: 40px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .welcome {
+      font-size: 26px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 25px;
+      justify-content: center;
+      margin-top: 60px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      padding: 25px;
+      flex: 1 1 calc(45% - 20px);
+      min-width: 280px;
+      max-width: 500px;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      font-size: 20px;
+      color: #222;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+      margin-top: 60px;
+      padding-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-header">
+    <h1>Admin Panel</h1>
+  </div>
+
+  <div class="main">
+
+    <div class="cards">
+        <div class="card">
+        <h3>Add New Teacher</h3>
+        <p>Add a new teacher to the system and view the list of all instructors currently registered in the system.</p>
+        <a href="add.html" class="btn">Add Teacher</a>
+      </div>
+      <div class="card">
+        <h3>Announcement Board</h3>
+        <p>Post new announcements and manage existing ones by editing or deleting them as needed for clarity.</p>
+        <a href="adminboard.html" class="btn">Manage Announcements</a>
+      </div>
+      <div class="card">
+        <h3>Timetable Management</h3>
+        <p>Assign, update, or delete lecture schedules for registered teachers and manage their weekly timetables efficiently.</p>
+        <a href="mange.html" class="btn">Manage Timetables</a>
+      </div>
+
+      <div class="card">
+        <h3>Notify Teacher</h3>
+<p>Send an email notification to each teacher informing them about the updated or newly assigned timetable.</p>
+       <a href="#"  onclick="sendNotification()" class="btn">Notify Teachers</a>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+  async function sendNotification() {
+    try {
+      const res = await fetch('http://localhost:5000/api/notify', { 
+        method: 'POST' 
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(" Email sent successfully to all teachers!");
+      } else {
+        alert("Error: " + data.message);
+      }
+    } catch (err) {
+      alert(" Network Error: " + err.message);
+    }
+  }
+</script>
+</body>
+</html>

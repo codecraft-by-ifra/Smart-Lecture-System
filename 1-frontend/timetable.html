@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Teacher Timetable</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+     /* background: linear-gradient(to right, #6ee7b7, #93c5fd, #c4b5fd);  */
+      margin: 0;
+      padding: 20px;
+    }
+     h1 {
+      text-align: center; 
+      margin-bottom: 30px;
+      background: linear-gradient( #4ade80, #3b82f6, #8b5cf6);
+    
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+    }
+
+    .search-section {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    #searchInput {
+      padding: 10px;
+      width: 300px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+   .card-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 20px;
+ 
+}
+
+    .day-card {
+      background: white;
+      min-width: 200px;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .lecture-box {
+      background: #f1f1f1;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1> View Teacher Timetable</h1>
+
+  <div class="search-section">
+    <select id="searchInput">
+      <option value="">Select Teacher</option>
+    </select>
+    <button onclick="fetchTimetable()">Search</button>
+  </div>
+
+  <div id="cardsContainer" class="card-container">
+<!-- cards shown here -->
+  </div>
+
+  <script>
+    const API_BASE = "http://localhost:5000";
+
+    async function fetchTimetable() {
+      const name = document.getElementById("searchInput").value.trim();
+      if (!name) return alert("Please select a teacher");
+
+      const res = await fetch(`${API_BASE}/api/timetable/${name}`);
+      const data = await res.json();
+
+      const timetable = data.timetable || [];
+
+      if (!timetable.length) {
+        document.getElementById("cardsContainer").innerHTML = "<p style='color:red'>No timetable found.</p>";
+        return;
+      }
+
+      renderCards(timetable);
+    }
+
+    function renderCards(timetable) {
+  const container = document.getElementById("cardsContainer");
+  container.innerHTML = "";
+
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+  for (let i = 0; i < 5; i++) {
+    const card = document.createElement("div");
+    card.className = "day-card";
+
+    const dayName = document.createElement("h3");
+    dayName.innerText = days[i];
+    card.appendChild(dayName);
+
+    for (let j = 0; j < 5; j++) {
+      const index = i * 5 + j;
+      const lec = timetable[index] || { subject: "", class: "", time: "" };
+
+      const box = document.createElement("div");
+      box.className = "lecture-box";
+      box.innerHTML = `
+        <b>Lecture ${j + 1}</b><br>
+        Subject: ${lec.subject || "-"}<br>
+        Class: ${lec.class || "-"}<br>
+        Time: ${lec.time || "-"}
+      `;
+      card.appendChild(box);
+    }
+
+    container.appendChild(card);
+  }
+}
+
+    
+   async function loadTeacherDropdown() {
+  const res = await fetch("http://localhost:5000/api/timetable/all");
+  const data = await res.json();
+  console.log("Fetched:", data); // debug
+
+  if (!Array.isArray(data)) {
+    console.error("Expected array, got:", data);
+    return;
+  }
+
+  const select = document.getElementById("searchInput");
+  select.innerHTML = `<option value="">Select Teacher</option>`;
+  data.forEach(item => {
+    const opt = document.createElement("option");
+    opt.value = item.teacherName;
+    opt.textContent = item.teacherName;
+    select.appendChild(opt);
+  });
+}
+
+
+    loadTeacherDropdown();
+  </script>
+</body>
+</html>

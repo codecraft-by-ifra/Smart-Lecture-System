@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Board - Announcements</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+      min-height: 100vh;
+      color: #1e293b;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-header {
+      background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      color: white;
+      padding: 30px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .app-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 2;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .app-header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 1400px;
+      margin: 30px auto;
+      padding: 0 30px;
+    }
+
+    .admin-board {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .admin-content {
+      display: flex;
+      gap: 40px;
+      margin-top: 20px;
+    }
+
+    .announcement-form, .announcements-list-container {
+      flex: 1;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-title, .list-title {
+      font-size: 1.5rem;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #1e293b;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .form-title i, .list-title i {
+      background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 18px;
+      font-size: 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 15px;
+      resize: vertical;
+      min-height: 180px;
+      margin-bottom: 25px;
+      transition: 0.3s ease;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .announcement-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .announcement-item {
+      background: white;
+      padding: 25px;
+      margin-bottom: 25px;
+      border-radius: 18px;
+      border-left: 5px solid #3b82f6;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+
+    .announcement-content {
+      font-size: 17px;
+      color: #475569;
+      line-height: 1.7;
+    }
+
+    .announcement-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: #64748b;
+    }
+
+    .announcement-date {
+      font-style: italic;
+    }
+
+    .announcement-actions {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      display: flex;
+      gap: 15px;
+    }
+
+    .action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 1.1rem;
+    }
+
+    .edit-btn:hover {
+      background: #dbeafe;
+      color: #3b82f6;
+    }
+
+    .delete-btn:hover {
+      background: #fee2e2;
+      color: #ef4444;
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 40px;
+      right: 40px;
+      padding: 18px 28px;
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+      transform: translateX(150%);
+      transition: transform 0.4s ease;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border-left: 5px solid #10b981;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification i {
+      font-size: 1.6rem;
+      color: #10b981;
+    }
+
+    .notification.error {
+      border-left: 5px solid #ef4444;
+    }
+
+    .notification.error i {
+      color: #ef4444;
+    }
+
+    .notification.warning {
+      border-left: 5px solid #f59e0b;
+    }
+
+    .notification.warning i {
+      color: #f59e0b;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-header">
+    <h1><i class="fas fa-bullhorn"></i> Announcement Management System</h1>
+    <p>Create and manage important announcements for your organization</p>
+  </div>
+
+  <div class="main-content">
+    <div class="admin-board">
+      <div class="admin-content">
+        <div class="announcement-form">
+          <h2 class="form-title"><i class="fas fa-plus-circle"></i> Create New Announcement</h2>
+          <textarea id="announcementInput" placeholder="Type your announcement here..."></textarea>
+          <div class="btn-group">
+            <button class="btn btn-primary" id="postBtn">
+              <i class="fas fa-paper-plane"></i> Post Announcement
+            </button>
+            <button class="btn btn-secondary" id="clearBtn">
+              <i class="fas fa-eraser"></i> Clear Form
+            </button>
+          </div>
+        </div>
+
+        <div class="announcements-list-container">
+          <h2 class="list-title"><i class="fas fa-list"></i> Recent Announcements</h2>
+          <div class="announcement-list" id="announcementList">
+            <div class="empty-state">
+              <i class="fas fa-inbox"></i>
+              <h3>No Announcements Yet</h3>
+              <p>Create your first announcement to get started</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i>
+    <span>Announcement posted successfully!</span>
+  </div>
+
+  <script>
+  const postBtn = document.getElementById('postBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const announcementInput = document.getElementById('announcementInput');
+  const announcementList = document.getElementById('announcementList');
+  const notification = document.getElementById('notification');
+
+  const backendURL = 'http://localhost:5000/api/announcements';
+
+  function showNotification(message, type = 'success') {
+    notification.querySelector('span').textContent = message;
+    notification.className = `notification ${type} show`;
+    setTimeout(() => notification.classList.remove('show'), 3000);
+  }
+
+  clearBtn.addEventListener('click', () => {
+    announcementInput.value = '';
+    showNotification("Form cleared", "warning");
+  });
+
+  postBtn.addEventListener('click', async () => {
+    const content = announcementInput.value.trim();
+
+    if (!content) {
+      showNotification("Please enter announcement text.", "error");
+      return;
+    }
+
+    try {
+      const res = await fetch(backendURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content })
+      });
+
+      if (!res.ok) throw new Error("Failed to post");
+
+      const saved = await res.json();
+      announcementInput.value = '';
+      showNotification("Announcement posted successfully!");
+      loadAnnouncements(); // Refresh 
+    } catch (err) {
+      showNotification("Error posting announcement.", "error");
+    }
+  });
+
+  async function loadAnnouncements() {
+    try {
+      const res = await fetch(backendURL);
+      const data = await res.json();
+
+      if (!data.length) {
+        announcementList.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h3>No Announcements Yet</h3>
+            <p>Create your first announcement to get started</p>
+          </div>`;
+        return;
+      }
+
+   
+      announcementList.innerHTML = '';
+
+      const latest5 = data.slice(0, 5); //  5 list show ho gi
+
+      latest5.forEach((announcement) => {
+        const createdDate = new Date(announcement.createdAt);
+        const displayDate = isNaN(createdDate) ? 'Invalid Date' : createdDate.toLocaleString();
+
+        const item = document.createElement('div');
+        item.className = 'announcement-item';
+        item.innerHTML = `
+          <div class="announcement-content">${announcement.content}</div>
+          <div class="announcement-meta">
+            <span class="announcement-date">${displayDate}</span>
+          </div>
+          <div class="announcement-actions">
+            <div class="action-btn edit-btn" onclick="editAnnouncement('${announcement._id}', '${announcement.content.replace(/'/g, "\\'")}')">
+              <i class="fas fa-edit"></i>
+            </div>
+            <div class="action-btn delete-btn" onclick="deleteAnnouncement('${announcement._id}')">
+              <i class="fas fa-trash"></i>
+            </div>
+          </div>`;
+        announcementList.appendChild(item);
+      });
+
+    } catch (err) {
+      showNotification("Failed to load announcements.", "error");
+    }
+  }
+
+  async function editAnnouncement(id, oldContent) {
+    const newContent = prompt("Edit announcement:", oldContent);
+    if (!newContent || newContent.trim() === '') return;
+
+    try {
+      const res = await fetch(`${backendURL}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: newContent.trim() })
+      });
+
+      if (!res.ok) throw new Error("Failed to update");
+      showNotification("Announcement updated successfully!");
+      loadAnnouncements();
+    } catch (err) {
+      showNotification("Error updating announcement.", "error");
+    }
+  }
+
+  async function deleteAnnouncement(id) {
+    if (!confirm("Are you sure you want to delete this announcement?")) return;
+
+    try {
+      const res = await fetch(`${backendURL}/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (!res.ok) throw new Error("Failed to delete");
+      showNotification("Announcement deleted!");
+      loadAnnouncements();
+    } catch (err) {
+      showNotification("Error deleting announcement.", "error");
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadAnnouncements);
+</script>
+
+
+
+
+</body>
+</html>
