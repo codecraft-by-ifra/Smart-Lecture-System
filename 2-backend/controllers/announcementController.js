@@ -18,6 +18,7 @@ exports.create = async (req, res) => {
       pinned: true
     });
 
+    
     const saved = await announcement.save();
     res.status(201).json(saved);
   } catch (err) {

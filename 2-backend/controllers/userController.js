@@ -26,8 +26,8 @@ const registerUser = async (req, res) => {
 
   await newUser.save();
    // Save teacher for notifications
-  const newTeacher = new Teacher({ name, email });
-  await newTeacher.save();
+  // const newTeacher = new Teacher({ name, email });
+  // await newTeacher.save();
   res.status(201).json({ message: 'User registered successfully' });
 };
 
