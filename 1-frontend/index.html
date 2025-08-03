@@ -6,20 +6,7 @@
   <title>SLSS</title>
   
   <style>
-    /* splash screen */
-    #splash-screen {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background-color: #ffffff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-
-    .logo { max-width: 400px; width: 100%; height: auto; }
-
+   
     /* reg page */
     .two {
       margin: 0;
@@ -98,6 +85,7 @@
       margin-top: -10px;
     }
 
+
     @keyframes fadeIn {
       0% { opacity: 0; transform: translateY(-20px); }
       100% { opacity: 1; transform: translateY(0); }
@@ -105,9 +93,6 @@
   </style>
 </head>
 <body>
-  <div id="splash-screen">
-    <img src="logo.jpg" alt="Logo" class="logo od SLSS">
-  </div>
 
   <section class="two">
     <div class="reg-container">
@@ -132,7 +117,7 @@
     window.addEventListener('load', function () {
       setTimeout(function () {
         document.getElementById('splash-screen').style.display = 'none';
-      }, 1000);
+      }, 3000);
     });
 
     async function validateForm(event) {

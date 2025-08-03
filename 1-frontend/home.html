@@ -34,19 +34,82 @@
       color: white;
       text-align: center;
       padding: 20px;
+      
+      
     }
 
     .hero h1 {
-      font-size: 42px;
-      margin-bottom: 10px;
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      line-height: 1.2;
+      letter-spacing: -0.5px;
     }
 
     .hero p {
+      
       font-size: 17px;
       max-width: 700px;
-      margin-top: 16px;
+        margin: 0 auto;
+      padding: 0 10px;
+       line-height: 1.6;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      font-weight: 400;
+    }
+    /* logout */
+     .nav-links {
+        display: flex;
+        
+        list-style: none;
+        position: absolute;
+        top: 70px;
+        right: 50px;
     }
 
+    .logout-btn {
+      background: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logout-btn span {
+      background: linear-gradient(135deg, #4ade80, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logout-btn i {
+      background: linear-gradient(135deg, #4ade80, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 1.4rem;
+      
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+    }
+
+    .logout-btn:hover i {
+      transform: rotate(360deg);
+    }
+/* ............................................. */
      .cards-container {
       display: flex;
       justify-content: center;
@@ -113,47 +176,47 @@
     }
 
 
-    footer {
-  text-align: center;
-  padding: 20px;
-  background: white;
-  margin-top: auto;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* soft top shadow */
-}
-
-.footer-icons {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-}
-
-.footer-icons a {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  background: linear-gradient(white, white) padding-box,
-              linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6) border-box;
-  color: #3b82f6; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  text-decoration: none;
-  transition: all 0.4s ease;
-  box-shadow: 0 0 8px rgba(76, 201, 240, 0.3); 
-}
-
-.footer-icons a i {
-  background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.footer-icons a:hover {
-  transform: scale(1.1);
-}
-
+  .footer {
+      background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      font-size: 1.1rem;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .footer a {
+      color: white;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 15px;
+      border-radius: 50px;
+      margin-top: 5px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .footer a:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    
     
   </style>
 </head>
@@ -166,6 +229,11 @@
     <p>A smart way to manage and organize lectures efficiently for both teachers and admins.
     Teachers stay organized with real-time timetables and announcements,
 while admins control scheduling, attendance, and updates in a seamless dashboard.</p>
+ <div class="nav-links">
+   <button onclick="logout()" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+      
+    </div>
   </section>
 
   <!-- Cards -->
@@ -198,8 +266,18 @@ while admins control scheduling, attendance, and updates in a seamless dashboard
 
   </section>
 
-   <footer>
-    <div class="footer-icons">
+      <footer class="footer">
+    <div class="footer-content">
+      <span>© 2025 Smart Lecture Scheduling System. All rights reserved.</span>
+       </div>
+      <div>
+      <a href="mailto:codecraftbyifrah@gmail.com" target="_blank" aria-label="Email">
+        <i class="fas fa-envelope"></i> codecraftbyifrah@gmail.com
+      </a>
+      </div>
+   
+  </footer>
+    <!-- <div class="footer-icons">
       <a href="https://www.instagram.com/ifrah_mehar?igsh=eDU2cHZ2c2xzMGY0" target="_blank" aria-label="Instagram">
         <i class="fab fa-instagram"></i>
       </a>
@@ -212,10 +290,28 @@ while admins control scheduling, attendance, and updates in a seamless dashboard
       <a href="https://github.com/codecraft-by-ifra" target="_blank" aria-label="GitHub">
         <i class="fab fa-github"></i>
       </a>
-    </div>
-  </footer>
+    </div> -->
 
 </div>
+<script>
+  function logout() {
+  if (confirm("Are you sure you want to logout?")) {
+    fetch("http://localhost:5000/api/logout", {   // Correct Backend URL
+      method: "POST",
+      credentials: "include"
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert(data.message);
+      window.location.href = "login.html";
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error during logout");
+    });
+  }
+}
+</script>
 
 </body>
 </html>

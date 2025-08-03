@@ -6,87 +6,171 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-     /* background: linear-gradient(to right, #6ee7b7, #93c5fd, #c4b5fd);  */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8fafc;
       margin: 0;
-      padding: 20px;
+      padding: 25px 20px;
+      min-height: 100vh;
     }
-     h1 {
-      text-align: center; 
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
       margin-bottom: 30px;
       background: linear-gradient( #4ade80, #3b82f6, #8b5cf6);
-    
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-weight: bold;
+      font-weight: 800;
+      font-size: 2.5rem;
+      padding: 0 15px;
+      letter-spacing: -0.5px;
     }
 
     .search-section {
       text-align: center;
-      margin: 30px 0;
+      margin: 40px 0 30px;
+      padding: 0 15px;
     }
 
     #searchInput {
-      padding: 10px;
-      width: 300px;
+      padding: 12px 18px;
+      width: 320px;
+      max-width: 90%;
       font-size: 16px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+    
+    #searchInput:focus {
+      outline: none;
+      border-color: #93c5fd;
+      box-shadow: 0 2px 12px rgba(59, 130, 246, 0.2);
     }
 
     button {
-      padding: 10px 20px;
+      padding: 12px 28px;
       font-size: 16px;
+      font-weight: 600;
       background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
       color: white;
       border: none;
-      border-radius: 6px;
-      margin-left: 10px;
+      border-radius: 10px;
+      margin-left: 12px;
       cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(59, 130, 246, 0.25);
+    }
+    
+    button:active {
+      transform: translateY(0);
     }
 
-   .card-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  gap: 20px;
-  padding: 20px;
- 
-}
+    .card-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 28px;
+      padding: 20px 15px;
+      margin: 0 10px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
 
     .day-card {
       background: white;
       min-width: 200px;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      padding: 22px 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      flex: 0 0 auto;
     }
+    
+    .day-card h3 {
+      text-align: center;
+      margin: 0 0 20px 0;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #f1f5f9;
+      color: #1e293b;
+      font-size: 1.4rem;
+      position: relative;
+    }
+    
 
     .lecture-box {
-      background: #f1f1f1;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
+      background: white;
+      padding: 14px 16px;
+      margin-top: 16px;
+      border-radius: 12px;
       font-size: 14px;
+      border: 1px solid #f1f5f9;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
     }
+    
+    .lecture-box:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+      border-color: #e0f2fe;
+    }
+    
+    .lecture-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 4px;
+      background: linear-gradient(to bottom, #4ade80, #3b82f6, #8b5cf6);
+    }
+    
+    .lecture-box b {
+      color: #1e293b;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    
+    .no-results {
+      text-align: center;
+      width: 100%;
+      padding: 40px 20px;
+      font-size: 18px;
+      color: #64748b;
+    }
+    
   </style>
 </head>
 <body>
-  <h1> View Teacher Timetable</h1>
+  <div class="container">
+    <h1>View Teacher Timetable</h1>
 
-  <div class="search-section">
-    <select id="searchInput">
-      <option value="">Select Teacher</option>
-    </select>
-    <button onclick="fetchTimetable()">Search</button>
+    <div class="search-section">
+      <select id="searchInput">
+        <option value="">Select Teacher</option>
+      </select>
+      <button onclick="fetchTimetable()">Search</button>
+    </div>
+
+    <div id="cardsContainer" class="card-container">
+      <!-- Timetable cards will appear here -->
+    </div>
   </div>
-
-  <div id="cardsContainer" class="card-container">
-<!-- cards shown here -->
-  </div>
-
-  <script>
+<script>
     const API_BASE = "http://localhost:5000";
 
     async function fetchTimetable() {
@@ -106,31 +190,32 @@
       renderCards(timetable);
     }
 
-    function renderCards(timetable) {
+   function renderCards(timetable) {
   const container = document.getElementById("cardsContainer");
   container.innerHTML = "";
 
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  const totalLectures = timetable.length / 5;
 
-  for (let i = 0; i < 5; i++) {
+  for (let day = 0; day < 5; day++) {
     const card = document.createElement("div");
     card.className = "day-card";
 
     const dayName = document.createElement("h3");
-    dayName.innerText = days[i];
+    dayName.innerText = days[day];
     card.appendChild(dayName);
 
-    for (let j = 0; j < 5; j++) {
-      const index = i * 5 + j;
-      const lec = timetable[index] || { subject: "", class: "", time: "" };
+    for (let lec = 0; lec < totalLectures; lec++) {
+      const index = lec * 5 + day;   // <-- Correct Indexing (row-major to column-major)
+      const lecture = timetable[index] || { subject: "", class: "", time: "" };
 
       const box = document.createElement("div");
       box.className = "lecture-box";
       box.innerHTML = `
-        <b>Lecture ${j + 1}</b><br>
-        Subject: ${lec.subject || "-"}<br>
-        Class: ${lec.class || "-"}<br>
-        Time: ${lec.time || "-"}
+        <b>Lecture ${lec + 1}</b><br>
+        Subject: ${lecture.subject || "-"}<br>
+        Class: ${lecture.class || "-"}<br>
+        Time: ${lecture.time || "-"}
       `;
       card.appendChild(box);
     }
@@ -138,6 +223,7 @@
     container.appendChild(card);
   }
 }
+
 
     
    async function loadTeacherDropdown() {
@@ -159,7 +245,6 @@
     select.appendChild(opt);
   });
 }
-
 
     loadTeacherDropdown();
   </script>

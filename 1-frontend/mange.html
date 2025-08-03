@@ -2,186 +2,351 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Manage Timetable</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timetable Management</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
       font-family: 'Segoe UI', sans-serif;
     }
 
     body {
-      margin: 0;
-      padding: 0;
-      /* background: linear-gradient(135deg, #aee2ff, #e8fbd5, #fde2e2, #f7d9ff); */
-       /* background: linear-gradient( #6ee7b7, #93c5fd, #c4b5fd);  */
+      color: #3b82f6;
+      background: #f5f7ff;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .container {
-      max-width: 1000px;
-      margin: 50px auto;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      padding: 30px;
-    }
-     h1 {
-      text-align: center; 
-      margin-bottom: 30px;
-      background: linear-gradient( #4ade80, #3b82f6, #8b5cf6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: bold;
-    }
-    .top-bar {
-      text-align: center;
-      margin-bottom: 30px;
+      width: 100%;
+      max-width: 1100px;
+      margin: 20px auto;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
     }
 
-    .top-bar select {
-      padding: 10px;
-      font-size: 16px;
+    .header {
+      background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      color: white;
+      padding: 20px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header h1 i {
+      background: rgba(255, 255, 255, 0.2);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .main-content {
+      padding: 25px 30px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .select-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f8fafc;
+      padding: 10px 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .select-container label {
+      font-weight: 500;
+      color: #3b82f6;
+    }
+
+    select {
+      padding: 10px 15px;
+      font-size: 0.95rem;
       border-radius: 8px;
-      width: 250px;
+      border: 2px solid #e2e8f0;
+      background: white;
+      min-width: 200px;
+      font-weight: 500;
+      color: #0f172a;
+      transition: 0.3s;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.3s;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.05);
+    }
+
+    .save-btn { background: #4ade80; color: white; }
+    .update-btn { background: #3b82f6; color: white; }
+    .delete-btn { background: #8b5cf6; color: white; }
+    .print-btn { background: #3b82f6; color: white; }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
     }
 
     table {
       width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 30px;
+      margin-top: 10px;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
     th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
+      color: #3b82f6;
+      padding: 10px 8px;
       text-align: center;
-    }
-    th {
-  background:  linear-gradient( #4ade80, #3b82f6);
- 
-  color: white;
-}
-
-td:first-child,
-th:first-child {
- background:  linear-gradient( #4ade80, #3b82f6);
-  color: white;
-  font-weight: bold;
-}
-
-    input {
-      width: 90%;
-      padding: 6px;
-      margin: 2px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      border-right: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 1rem;
+      font-weight: bolder;
     }
 
-    .btn-group {
-      text-align: center;
+    th:last-child, td:last-child { border-right: none; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    thead tr {
+      background: linear-gradient(135deg, #4ade80, #3b82f6, #8b5cf6);
     }
 
-    .btn {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      margin: 0 10px;
-      font-size: 16px;
-      cursor: pointer;
+    thead th {
       color: white;
+      font-weight: 600;
+      font-size: 1rem;
     }
 
-    .save-btn {
-      background-color: #3b82f6;
+    tbody tr:nth-child(even) { background: #f9fafb; }
+    tbody tr:hover { background: #f1f5f9; }
+
+    input[type="text"] {
+      width: 85%;
+      padding: 8px;
+      margin: 3px 0;
+      border: 2px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      text-align: center;
+      transition: 0.3s;
     }
 
-    .update-btn {
-      background-color: #4ade80;
+    input[type="text"]:focus {
+      border-color: #3b82f6;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
     }
 
-    .delete-btn {
-      background-color: #8b5cf6;
+    .lecture-btn {
+      padding:14px;
+      width: 90px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(#4ade80, #3b82f6, #8b5cf6);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: 0.3s;
+      font-size: 0.85rem;
+    }
+
+    .lecture-btn:hover { transform: translateY(-1px); }
+    #teacherNamePrint {
+        text-align:center; 
+        font-size:20px;
+         font-weight:bold; 
+         margin-bottom:20px;
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #printSection, #printSection * { visibility: visible; }
+      #printSection { position: absolute; top: 0; left: 0; width: 100%; }
+      @page { size: A4 landscape; margin: 10mm; }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1><i class="fas fa-calendar-alt"></i> Manage Timetable</h1>
-
-    <div class="top-bar">
-      <select id="teacherSelect" onchange="loadTimetable()">
-        <option value="">Select Teacher</option>
-      </select>
+    <div class="header">
+      <h1> Timetable Management</h1>
     </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Lecture #</th>
-          <th>Monday</th>
-          <th>Tuesday</th>
-          <th>Wednesday</th>
-          <th>Thursday</th>
-          <th>Friday</th>
-        </tr>
-      </thead>
-      <tbody id="timetableBody">
+    <div class="main-content">
+      <div class="top-bar">
+        <div class="select-container">
+          <label><i class="fas fa-chalkboard-teacher"></i> Select Teacher:</label>
+          <select id="teacherSelect" onchange="loadTimetable()"></select>
+        </div>
+        <div class="btn-group">
+          <button class="btn save-btn" onclick="saveTimetable()"><i class="fas fa-save"></i> Save</button>
+          <button class="btn update-btn" onclick="updateTimetable()"><i class="fas fa-sync-alt"></i> Update</button>
+          <button class="btn delete-btn" onclick="deleteTimetable()"><i class="fas fa-trash-alt"></i> Delete</button>
+          <button class="btn print-btn" onclick="printTimetable()"><i class="fas fa-print"></i> Print</button>
+        </div>
+      </div>
 
-      </tbody>
-    </table>
-
-    <div class="btn-group">
-      <button class="btn save-btn" onclick="saveTimetable()">Save</button>
-      <button class="btn update-btn" onclick="updateTimetable()">Update</button>
-      <button class="btn delete-btn" onclick="deleteTimetable()">Delete</button>
+      <div id="printSection">
+        <div id="teacherNamePrint"></div>
+        <table>
+          <thead>
+            <tr>
+              <th>Lecture #</th>
+              <th>Monday</th>
+              <th>Tuesday</th>
+              <th>Wednesday</th>
+              <th>Thursday</th>
+              <th>Friday</th>
+            </tr>
+          </thead>
+          <tbody id="timetableBody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
- <script>
-  const API_BASE = "http://localhost:5000";
-  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-  const lectures = [1, 2, 3, 4, 5];
+  <script>
+    let totalLectures = 5;
+    const API_BASE = "http://localhost:5000";
 
-  function createGrid(data = []) {
-    const tbody = document.getElementById('timetableBody');
-    tbody.innerHTML = '';
+    function createGrid(data = []) {
+      const tbody = document.getElementById('timetableBody');
+      tbody.innerHTML = '';
 
-    for (let i = 0; i < 5; i++) {
-      const row = document.createElement('tr');
-      const rowLabel = document.createElement('td');
-      rowLabel.innerText = i + 1;
-      row.appendChild(rowLabel);
+      for (let i = 0; i < totalLectures; i++) {
+        const row = document.createElement('tr');
+        const label = document.createElement('td');
+        label.innerText = i + 1;
+        row.appendChild(label);
 
-      for (let j = 0; j < 5; j++) {
-        const cell = document.createElement('td');
-        const index = i * 5 + j;
-        const item = data[index] || { subject: '', class: '', time: '' };
-        cell.innerHTML = `
-          <input type="text" placeholder="Subject" value="${item.subject || ''}" />
-          <input type="text" placeholder="Class" value="${item.class || ''}" />
-          <input type="text" placeholder="Time" value="${item.time || ''}" />
-        `;
-        row.appendChild(cell);
+        for (let j = 0; j < 5; j++) {
+          const cell = document.createElement('td');
+          const index = i * 5 + j;
+          const item = data[index] || { subject: '', class: '', time: '' };
+          cell.innerHTML = `
+            <input type="text" placeholder="Subject" value="${item.subject}">
+            <input type="text" placeholder="Class" value="${item.class}">
+            <input type="text" placeholder="Time" value="${item.time}">
+          `;
+          row.appendChild(cell);
+        }
+        tbody.appendChild(row);
       }
 
-      tbody.appendChild(row);
+      const controlRow = document.createElement('tr');
+      controlRow.innerHTML = `
+        <td colspan="6" style="text-align:center; padding:10px;">
+          <button class="lecture-btn" onclick="addLectureRow()"><i class="fas fa-plus"></i> Add</button>
+          <button class="lecture-btn" onclick="removeLectureRow()"><i class="fas fa-minus"></i> Remove</button>
+        </td>
+      `;
+      tbody.appendChild(controlRow);
     }
-  }
 
-  async function loadTeacherDropdown() {
-    const res = await fetch(`${API_BASE}/api/teachers`);
-    const data = await res.json();
-    const select = document.getElementById("teacherSelect");
-    select.innerHTML = '<option value="">Select Teacher</option>';
-    data.forEach(t => {
-      const opt = document.createElement("option");
-      opt.value = t.name;
-      opt.textContent = t.name;
-      select.appendChild(opt);
-    });
-  }
+    function addLectureRow() {
+      totalLectures++;
+      createGrid(getTimetableData());
+    }
 
-  async function saveTimetable() {
+    function removeLectureRow() {
+      if (totalLectures > 5) {
+        totalLectures--;
+        createGrid(getTimetableData());
+      } else {
+        alert('Minimum 5 lectures required');
+      }
+    }
+
+    function getTimetableData() {
+      const data = [];
+      const rows = document.querySelectorAll('#timetableBody tr');
+      rows.forEach(row => {
+        const inputs = row.querySelectorAll('td input');
+        if (inputs.length) {
+          for (let i = 0; i < 5; i++) {
+            const idx = i * 3;
+            data.push({
+              subject: inputs[idx]?.value || '',
+              class: inputs[idx + 1]?.value || '',
+              time: inputs[idx + 2]?.value || ''
+            });
+          }
+        }
+      });
+      return data;
+    }
+
+    async function loadTeacherDropdown() {
+      const res = await fetch(`${API_BASE}/api/teachers`);
+      const data = await res.json();
+      const select = document.getElementById("teacherSelect");
+      select.innerHTML = '<option value="">Select Teacher</option>';
+      data.forEach(t => {
+        const opt = document.createElement("option");
+        opt.value = t.name;
+        opt.textContent = t.name;
+        select.appendChild(opt);
+      });
+    }
+    
+    async function saveTimetable() {
     const name = document.getElementById('teacherSelect').value;
     if (!name) return alert("Select a teacher first!");
 
@@ -206,7 +371,7 @@ th:first-child {
       }
 
     } else {
-      // elsee call save
+
       const res = await fetch(`${API_BASE}/api/timetable/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -218,7 +383,7 @@ th:first-child {
     }
   }
 
-  async function updateTimetable() {
+   async function updateTimetable() {
     const name = document.getElementById('teacherSelect').value;
     if (!name) return alert("Select a teacher first!");
 
@@ -232,7 +397,28 @@ th:first-child {
     if (res.ok) alert("Timetable updated!");
   }
 
-  async function deleteTimetable() {
+  async function loadTimetable() {
+  const name = document.getElementById('teacherSelect').value;
+  document.getElementById('teacherNamePrint').innerText = name ? `Teacher: ${name}` : '';
+
+  if (!name) return createGrid();
+
+  try {
+    const res = await fetch(`${API_BASE}/api/timetable/${name}`);
+    const data = await res.json();
+    
+    const timetable = data.timetable || [];
+    totalLectures = Math.ceil(timetable.length / 5); 
+    createGrid(timetable);
+  } catch (err) {
+    console.error(err);
+    createGrid(); // empty grid
+  }
+}
+
+
+   
+   async function deleteTimetable() {
     const name = document.getElementById('teacherSelect').value;
     if (!name) return alert("Select a teacher first!");
 
@@ -249,35 +435,14 @@ const data = getTimetableData();
     }
   }
 
-  async function loadTimetable() {
-    const name = document.getElementById('teacherSelect').value;
-    if (!name) return createGrid();
+    function printTimetable() {
+      window.print();
+    }
 
-    const res = await fetch(`${API_BASE}/api/timetable/${name}`);
-    const data = await res.json();
-    createGrid(data.timetable || []);
-  }
-
-  function getTimetableData() {
-    const result = [];
-    const rows = document.querySelectorAll('#timetableBody tr');
-    rows.forEach(row => {
-      const inputs = row.querySelectorAll('td input');
-      for (let i = 0; i < 5; i++) {
-        const index = i * 3;
-        result.push({
-          subject: inputs[index]?.value || '',
-          class: inputs[index + 1]?.value || '',
-          time: inputs[index + 2]?.value || ''
-        });
-      }
+    document.addEventListener('DOMContentLoaded', () => {
+      loadTeacherDropdown();
+      createGrid();
     });
-    return result;
-  }
-
-  loadTeacherDropdown();
-  createGrid();
-</script>
-
+  </script>
 </body>
 </html>

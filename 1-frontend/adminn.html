@@ -30,6 +30,57 @@
       padding: 0 40px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
+     .nav-links {
+        display: flex;
+        list-style: none;
+        position: absolute;
+        top: 45px;
+        right: 60px;
+    }
+
+    .logout-btn {
+      background: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logout-btn span {
+      background: linear-gradient(135deg, #4ade80, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      z-index: 2;
+    }
+
+    .logout-btn i {
+      background: linear-gradient(135deg, #4ade80, #3b82f6, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 1.4rem;
+      
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+    }
+
+    .logout-btn:hover i {
+      transform: rotate(360deg);
+    }
     .main {
       padding: 40px;
       max-width: 1200px;
@@ -50,6 +101,9 @@
       gap: 25px;
       justify-content: center;
       margin-top: 60px;
+      align-items: center;
+     margin-top: 30px;
+     margin-bottom: 20px;
     }
 
     .card {
@@ -97,18 +151,57 @@
     }
 
     .footer {
+      background: linear-gradient(to right, #4ade80, #3b82f6, #8b5cf6);
+      color: white;
+      padding: 20px;
       text-align: center;
-      font-size: 14px;
-      color: #777;
-      margin-top: 60px;
-      padding-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      font-size: 1.1rem;
     }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .footer a {
+      color: white;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 15px;
+      border-radius: 50px;
+      margin-top: 5px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .footer a:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+   
   </style>
 </head>
 <body>
 
   <div class="top-header">
     <h1>Admin Panel</h1>
+   <div class="nav-links">
+   <button onclick="logout()" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+      
+    </div>
   </div>
 
   <div class="main">
@@ -138,8 +231,36 @@
     </div>
   </div>
 
+    <footer class="footer">
+    <div class="footer-content">
+      <span>© 2025 Smart Lecture Scheduling System. All rights reserved.</span>
+       </div>
+      <div>
+      <a href="mailto:codecraftbyifrah@gmail.com" target="_blank" aria-label="Email">
+        <i class="fas fa-envelope"></i> codecraftbyifrah@gmail.com
+      </a>
+      </div>
+   
+  </footer>
 
   <script>
+    function logout() {
+  if (confirm("Are you sure you want to logout?")) {
+    fetch("http://localhost:5000/api/logout", {   // Correct Backend URL
+      method: "POST",
+      credentials: "include"
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert(data.message);
+      window.location.href = "login.html";
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error during logout");
+    });
+  }
+}
   async function sendNotification() {
     try {
       const res = await fetch('http://localhost:5000/api/notify', { 
