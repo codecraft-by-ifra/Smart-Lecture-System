@@ -368,7 +368,7 @@
         <div class="features-grid">
             <div class="feature-card">
                 <i class="fas fa-users feature-icon"></i>
-                <h3 class="feature-title">User Management</h3>
+                <hcv3 class="feature-title">User Management</h3>
                 <p class="feature-desc">Separate portals for teachers and admins with secure authentication and role-based access control.</p>
             </div>
             
@@ -377,25 +377,21 @@
                 <h3 class="feature-title">Teacher Dashboard</h3>
                 <p class="feature-desc">Personalized lecture schedules, real-time updates, and access to important announcements.</p>
             </div>
-            
             <div class="feature-card">
                 <i class="fas fa-cogs feature-icon"></i>
                 <h3 class="feature-title">Admin Dashboard</h3>
                 <p class="feature-desc">Manage teachers, assign lectures, post announcements, and monitor system performance.</p>
             </div>
-            
             <div class="feature-card">
                 <i class="fas fa-bell feature-icon"></i>
                 <h3 class="feature-title">Real-Time Notifications</h3>
                 <p class="feature-desc">Instant updates through email for timetable changes.</p>
             </div>
-            
             <div class="feature-card">
                 <i class="fas fa-bullhorn feature-icon"></i>
                 <h3 class="feature-title">Announcements Panel</h3>
                 <p class="feature-desc">Broadcast important messages to all faculty members instantly.</p>
             </div>
-            
             <div class="feature-card">
                 <i class="fas fa-server feature-icon"></i>
                 <h3 class="feature-title">Backend Integration</h3>
@@ -403,7 +399,6 @@
             </div>
         </div>
     </section>
-
    <!-- footer -->
    <footer class="footer">
     <div class="footer-content">
@@ -414,7 +409,6 @@
         <i class="fas fa-envelope"></i> codecraftbyifrah@gmail.com
       </a>
       </div>
-   
   </footer>
     <script>
 // splash
@@ -423,20 +417,18 @@
         document.getElementById('splash-screen').style.display = 'none';
       }, 3000);
     });
-
         // Simple animations on scroll
         document.addEventListener('DOMContentLoaded', function() {
             // Feature card animation
             const featureCards = document.querySelectorAll('.feature-card');
             featureCards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-10px)';
+                 this.style.transform = 'translateY(-10px)';
                 });
                 card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
+                 this.style.transform = 'translateY(0)';
                 });
             });
-            
             // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function(e) {
@@ -446,7 +438,7 @@
                         window.scrollTo({
                             top: target.offsetTop - 80,
                             behavior: 'smooth'
-                        });
+                        }); 
                     }
                 });
             });
